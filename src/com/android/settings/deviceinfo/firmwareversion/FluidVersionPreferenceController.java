@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 The LineageOS Project
+ * Copyright (C) 2017 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.settings.deviceinfo.firmwareversion;
 
 import android.content.Context;
+import android.os.SystemProperties;
+import androidx.annotation.VisibleForTesting;
 
+import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
 
-public class LineageApiVersionPreferenceController extends BasePreferenceController {
+public class FluidVersionPreferenceController extends BasePreferenceController {
 
-    private static final String TAG = "LineageApiVersionCtrl";
+    @VisibleForTesting
+    private static final String FLUID_VERSION_PROPERTY = "ro.fluid.build.version";
 
-    public LineageApiVersionPreferenceController(Context context, String key) {
-        super(context, key);
+    public FluidVersionPreferenceController(Context context, String preferenceKey) {
+        super(context, preferenceKey);
     }
 
     @Override
@@ -35,10 +38,7 @@ public class LineageApiVersionPreferenceController extends BasePreferenceControl
 
     @Override
     public CharSequence getSummary() {
-        final int sdk = lineageos.os.Build.LINEAGE_VERSION.SDK_INT;
-        StringBuilder builder = new StringBuilder();
-        builder.append(lineageos.os.Build.getNameForSDKInt(sdk))
-                .append(" (" + sdk + ")");
-        return builder.toString();
+        return SystemProperties.get(FLUID_VERSION_PROPERTY,
+                mContext.getString(R.string.device_info_default));
     }
 }
